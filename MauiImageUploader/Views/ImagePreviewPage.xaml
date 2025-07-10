@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiImageUploader.Views.ImagePreviewPage"
+             BackgroundColor="#000000CC"
+             NavigationPage.HasNavigationBar="False"
+             Padding="0">
+
+    <Grid>
+        <!-- Dimmed background -->
+        <BoxView BackgroundColor="Black" Opacity="0.8" />
+
+        <!-- Centered image with close button overlay -->
+        <Grid Padding="20"
+              VerticalOptions="Center"
+              HorizontalOptions="Center">
+
+            <!-- Responsive Image -->
+            <Image x:Name="PreviewImage"
+                   Aspect="AspectFit"
+                   MaximumWidthRequest="800"
+                   MaximumHeightRequest="800"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <!-- Modern close button using Border -->
+            <Label Text="&#xf00d;"  
+                   FontFamily="FontAwesome"
+                   FontSize="28"
+                   TextColor="White"
+                   BackgroundColor="#222222"
+                   Padding="8"
+                   HorizontalOptions="End"
+                   VerticalOptions="Start"
+                   Margin="10">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCloseClicked" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+    </Grid>
+</ContentPage>

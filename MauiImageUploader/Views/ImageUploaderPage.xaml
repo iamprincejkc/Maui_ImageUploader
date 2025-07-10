@@ -1,0 +1,235 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiImageUploader.Views.ImageUploaderPage"
+             Title="Image Uploader v1.0.0"
+             BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#1C1C1C}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+
+            <!-- BaseName Entry -->
+            <Label Text="Base Name" FontAttributes="Bold" FontSize="14" />
+            <Border Stroke="#CCCCCC"
+                    StrokeShape="RoundRectangle 6"
+                    BackgroundColor="White"
+                    Padding="10">
+                <Entry x:Name="BaseNameEntry"
+                       Placeholder="e.g., 893724"
+                       BackgroundColor="Transparent"
+                       FontSize="14"
+                       TextColor="Black"
+                       PlaceholderColor="Gray" />
+            </Border>
+
+            <!-- Label Entry -->
+            <Label Text="Label" FontAttributes="Bold" FontSize="14" />
+            <Border Stroke="#CCCCCC"
+                    StrokeShape="RoundRectangle 6"
+                    BackgroundColor="White"
+                    Padding="10">
+                <Entry x:Name="LabelEntry"
+                       Placeholder="e.g., RearView"
+                       BackgroundColor="Transparent"
+                       FontSize="14"
+                       TextColor="Black"
+                       PlaceholderColor="Gray" />
+            </Border>
+
+            <!-- Upload Box -->
+            <Border x:Name="UploadBorder"
+                    Stroke="#CCCCCC"
+                    StrokeShape="RoundRectangle 10"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=#2C2C2C}"
+                    Padding="20"
+                    HeightRequest="100"
+                    HorizontalOptions="Fill">
+                <Grid>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="6">
+                        <Label Text="&#xf093;"
+                               FontFamily="FontAwesome"
+                               FontSize="40"
+                               TextColor="{AppThemeBinding Light=#666666, Dark=White}"
+                               HorizontalOptions="Center" />
+
+                        <Label Text="Tap to select image"
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#999999, Dark=LightGray}"
+                               HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPickImageClicked" />
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Border>
+
+            <!-- Status -->
+            <Label x:Name="StatusLabel"
+                   FontSize="13"
+                   FontAttributes="Italic"
+                   TextColor="Crimson"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,10" />
+
+            <!-- Save Button -->
+            <Button Text="Save Image"
+                    x:Name="SaveImageButton"
+                    IsEnabled="False"
+                    Clicked="OnSaveImageClicked"
+                    BackgroundColor="{AppThemeBinding Light=#0078D7, Dark=#3399FF}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="6"
+                    HeightRequest="48"
+                    FontSize="16"
+                    HorizontalOptions="Fill" />
+
+            <!-- Preview Title -->
+            <Label Text="Preview"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#333333, Dark=White}"
+                   Margin="0,20,0,10" />
+
+            <!-- 2-Column Grid Preview -->
+            <Grid x:Name="GridLayout"
+                  ColumnSpacing="16"
+                  RowSpacing="16"
+                  IsVisible="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Column 1 -->
+                <VerticalStackLayout Grid.Column="0" Spacing="12">
+                    <Label Text="Original" FontAttributes="Bold" FontSize="13" />
+                    <Border Stroke="#E0E0E0"
+                            StrokeShape="RoundRectangle 6"
+                            Padding="2"
+                            HeightRequest="300"
+                            MaximumHeightRequest="300">
+                        <Image x:Name="OriginalImage"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Fill">
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnImageTapped" />
+                            </Image.GestureRecognizers>
+                            
+                        </Image>
+                    </Border>
+
+                    <Label Text="Medium" FontAttributes="Bold" FontSize="13" />
+                    <Border Stroke="#E0E0E0"
+                            StrokeShape="RoundRectangle 6"
+                            Padding="2"
+                            HeightRequest="300"
+                            MaximumHeightRequest="300">
+                        <Image x:Name="MediumImage"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Fill" >
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnImageTapped" />
+                            </Image.GestureRecognizers>
+
+                        </Image>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Column 2 -->
+                <VerticalStackLayout Grid.Column="1" Spacing="12">
+                    <Label Text="Large" FontAttributes="Bold" FontSize="13" />
+                    <Border Stroke="#E0E0E0"
+                            StrokeShape="RoundRectangle 6"
+                            Padding="2"
+                            HeightRequest="300"
+                            MaximumHeightRequest="300">
+                        <Image x:Name="LargeImage"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Fill" >
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnImageTapped" />
+                            </Image.GestureRecognizers>
+
+                        </Image>
+                    </Border>
+
+                    <Label Text="Small" FontAttributes="Bold" FontSize="13" />
+                    <Border Stroke="#E0E0E0"
+                            StrokeShape="RoundRectangle 6"
+                            Padding="2"
+                            HeightRequest="300"
+                            MaximumHeightRequest="300">
+                        <Image x:Name="SmallImage"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Fill" >
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnImageTapped" />
+                            </Image.GestureRecognizers>
+
+                        </Image>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- 1-Column Stack for Narrow Screens -->
+            <VerticalStackLayout x:Name="StackLayout"
+                                 IsVisible="False"
+                                 Spacing="12"
+                                 Margin="0,10,0,0">
+                <Label Text="Original" FontAttributes="Bold" />
+                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
+                    <Image x:Name="OriginalImageSmall" Aspect="AspectFit" />
+                </Border>
+
+                <Label Text="Large" FontAttributes="Bold" />
+                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
+                    <Image x:Name="LargeImageSmall" Aspect="AspectFit" />
+                </Border>
+
+                <Label Text="Medium" FontAttributes="Bold" />
+                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
+                    <Image x:Name="MediumImageSmall" Aspect="AspectFit" />
+                </Border>
+
+                <Label Text="Small" FontAttributes="Bold" />
+                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
+                    <Image x:Name="SmallImageSmall" Aspect="AspectFit" />
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- Responsive Switch -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ResponsiveStates">
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter TargetName="GridLayout" Property="IsVisible" Value="False" />
+                        <Setter TargetName="StackLayout" Property="IsVisible" Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter TargetName="GridLayout" Property="IsVisible" Value="True" />
+                        <Setter TargetName="StackLayout" Property="IsVisible" Value="False" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </ScrollView>
+</ContentPage>
