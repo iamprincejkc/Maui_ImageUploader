@@ -2,41 +2,63 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiImageUploader.Views.ImagePreviewPage"
-             BackgroundColor="#000000CC"
-             NavigationPage.HasNavigationBar="False"
-             Padding="0">
+             Title="Image Preview">
 
-    <Grid>
-        <!-- Dimmed background -->
-        <BoxView BackgroundColor="Black" Opacity="0.8" />
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
 
-        <!-- Centered image with close button overlay -->
-        <Grid Padding="20"
-              VerticalOptions="Center"
-              HorizontalOptions="Center">
-
-            <!-- Responsive Image -->
-            <Image x:Name="PreviewImage"
-                   Aspect="AspectFit"
-                   MaximumWidthRequest="800"
-                   MaximumHeightRequest="800"
+            <Label Text="Image Preview"
+                   FontSize="24"
+                   FontAttributes="Bold"
                    HorizontalOptions="Center"
-                   VerticalOptions="Center" />
+                   Margin="0,10,0,20" />
 
-            <!-- Modern close button using Border -->
-            <Label Text="&#xf00d;"  
-                   FontFamily="FontAwesome"
-                   FontSize="28"
-                   TextColor="White"
-                   BackgroundColor="#222222"
-                   Padding="8"
-                   HorizontalOptions="End"
-                   VerticalOptions="Start"
-                   Margin="10">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnCloseClicked" />
-                </Label.GestureRecognizers>
-            </Label>
-        </Grid>
-    </Grid>
+            <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   Padding="15"
+                   CornerRadius="10">
+                <StackLayout Spacing="15">
+
+                    <Label x:Name="ImageInfoLabel"
+                           Text="Select an image to preview"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+
+                    <Image x:Name="PreviewImage"
+                           Aspect="AspectFit"
+                           HeightRequest="300"
+                           IsVisible="False"
+                           BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}" />
+
+                    <Button x:Name="SelectImageButton"
+                            Text="📷 Select Image"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                            TextColor="White"
+                            Clicked="OnSelectImageClicked"
+                            CornerRadius="8"
+                            HeightRequest="50" />
+
+                </StackLayout>
+            </Frame>
+
+            <Frame x:Name="ImageDetailsFrame"
+                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                   BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                   Padding="15"
+                   CornerRadius="8"
+                   IsVisible="False">
+                <StackLayout>
+                    <Label Text="Image Details"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           Margin="0,0,0,10" />
+                    <Label x:Name="ImageDetailsLabel"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                </StackLayout>
+            </Frame>
+
+        </StackLayout>
+    </ScrollView>
+
 </ContentPage>

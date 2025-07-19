@@ -1,235 +1,709 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiImageUploader.Views.ImageUploaderPage"
-             Title="Image Uploader v1.0.0"
-             BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#1C1C1C}">
+             Title="Image Uploader">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-
-            <!-- BaseName Entry -->
-            <Label Text="Base Name" FontAttributes="Bold" FontSize="14" />
-            <Border Stroke="#CCCCCC"
-                    StrokeShape="RoundRectangle 6"
-                    BackgroundColor="White"
-                    Padding="10">
-                <Entry x:Name="BaseNameEntry"
-                       Placeholder="e.g., 893724"
-                       BackgroundColor="Transparent"
-                       FontSize="14"
-                       TextColor="Black"
-                       PlaceholderColor="Gray" />
-            </Border>
-
-            <!-- Label Entry -->
-            <Label Text="Label" FontAttributes="Bold" FontSize="14" />
-            <Border Stroke="#CCCCCC"
-                    StrokeShape="RoundRectangle 6"
-                    BackgroundColor="White"
-                    Padding="10">
-                <Entry x:Name="LabelEntry"
-                       Placeholder="e.g., RearView"
-                       BackgroundColor="Transparent"
-                       FontSize="14"
-                       TextColor="Black"
-                       PlaceholderColor="Gray" />
-            </Border>
-
-            <!-- Upload Box -->
-            <Border x:Name="UploadBorder"
-                    Stroke="#CCCCCC"
-                    StrokeShape="RoundRectangle 10"
-                    BackgroundColor="{AppThemeBinding Light=White, Dark=#2C2C2C}"
-                    Padding="20"
-                    HeightRequest="100"
-                    HorizontalOptions="Fill">
-                <Grid>
-                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="6">
-                        <Label Text="&#xf093;"
-                               FontFamily="FontAwesome"
-                               FontSize="40"
-                               TextColor="{AppThemeBinding Light=#666666, Dark=White}"
-                               HorizontalOptions="Center" />
-
-                        <Label Text="Tap to select image"
-                               FontSize="13"
-                               TextColor="{AppThemeBinding Light=#999999, Dark=LightGray}"
-                               HorizontalTextAlignment="Center" />
-                    </StackLayout>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnPickImageClicked" />
-                    </Grid.GestureRecognizers>
-                </Grid>
-            </Border>
-
-            <!-- Status -->
-            <Label x:Name="StatusLabel"
-                   FontSize="13"
-                   FontAttributes="Italic"
-                   TextColor="Crimson"
-                   HorizontalTextAlignment="Center"
-                   Margin="0,0,0,10" />
-
-            <!-- Save Button -->
-            <Button Text="Save Image"
-                    x:Name="SaveImageButton"
-                    IsEnabled="False"
-                    Clicked="OnSaveImageClicked"
-                    BackgroundColor="{AppThemeBinding Light=#0078D7, Dark=#3399FF}"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    CornerRadius="6"
-                    HeightRequest="48"
-                    FontSize="16"
-                    HorizontalOptions="Fill" />
-
-            <!-- Preview Title -->
-            <Label Text="Preview"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{AppThemeBinding Light=#333333, Dark=White}"
-                   Margin="0,20,0,10" />
-
-            <!-- 2-Column Grid Preview -->
-            <Grid x:Name="GridLayout"
-                  ColumnSpacing="16"
-                  RowSpacing="16"
-                  IsVisible="True">
+        <!-- Tab Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+                Padding="10,5">
+            <Grid ColumnSpacing="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
 
-                <!-- Column 1 -->
-                <VerticalStackLayout Grid.Column="0" Spacing="12">
-                    <Label Text="Original" FontAttributes="Bold" FontSize="13" />
-                    <Border Stroke="#E0E0E0"
-                            StrokeShape="RoundRectangle 6"
-                            Padding="2"
-                            HeightRequest="300"
-                            MaximumHeightRequest="300">
-                        <Image x:Name="OriginalImage"
-                               Aspect="AspectFit"
-                               HorizontalOptions="Fill">
+                <Button x:Name="SingleTabButton"
+                        Grid.Column="0"
+                        Text="Single"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                        TextColor="White"
+                        Clicked="OnSingleTabClicked"
+                        CornerRadius="8"
+                        FontSize="14"
+                        MinimumHeightRequest="45" />
 
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnImageTapped" />
-                            </Image.GestureRecognizers>
-                            
-                        </Image>
-                    </Border>
+                <Button x:Name="BulkTabButton"
+                        Grid.Column="1"
+                        Text="Bulk"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}"
+                        Clicked="OnBulkTabClicked"
+                        CornerRadius="8"
+                        FontSize="14"
+                        MinimumHeightRequest="45" />
 
-                    <Label Text="Medium" FontAttributes="Bold" FontSize="13" />
-                    <Border Stroke="#E0E0E0"
-                            StrokeShape="RoundRectangle 6"
-                            Padding="2"
-                            HeightRequest="300"
-                            MaximumHeightRequest="300">
-                        <Image x:Name="MediumImage"
-                               Aspect="AspectFit"
-                               HorizontalOptions="Fill" >
-
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnImageTapped" />
-                            </Image.GestureRecognizers>
-
-                        </Image>
-                    </Border>
-                </VerticalStackLayout>
-
-                <!-- Column 2 -->
-                <VerticalStackLayout Grid.Column="1" Spacing="12">
-                    <Label Text="Large" FontAttributes="Bold" FontSize="13" />
-                    <Border Stroke="#E0E0E0"
-                            StrokeShape="RoundRectangle 6"
-                            Padding="2"
-                            HeightRequest="300"
-                            MaximumHeightRequest="300">
-                        <Image x:Name="LargeImage"
-                               Aspect="AspectFit"
-                               HorizontalOptions="Fill" >
-
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnImageTapped" />
-                            </Image.GestureRecognizers>
-
-                        </Image>
-                    </Border>
-
-                    <Label Text="Small" FontAttributes="Bold" FontSize="13" />
-                    <Border Stroke="#E0E0E0"
-                            StrokeShape="RoundRectangle 6"
-                            Padding="2"
-                            HeightRequest="300"
-                            MaximumHeightRequest="300">
-                        <Image x:Name="SmallImage"
-                               Aspect="AspectFit"
-                               HorizontalOptions="Fill" >
-
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnImageTapped" />
-                            </Image.GestureRecognizers>
-
-                        </Image>
-                    </Border>
-                </VerticalStackLayout>
+                <Button x:Name="FtpTabButton"
+                        Grid.Column="2"
+                        Text="FTP Bulk"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray100}}"
+                        Clicked="OnFtpTabClicked"
+                        CornerRadius="8"
+                        FontSize="14"
+                        MinimumHeightRequest="45" />
             </Grid>
+        </Border>
 
-            <!-- 1-Column Stack for Narrow Screens -->
-            <VerticalStackLayout x:Name="StackLayout"
-                                 IsVisible="False"
-                                 Spacing="12"
-                                 Margin="0,10,0,0">
-                <Label Text="Original" FontAttributes="Bold" />
-                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
-                    <Image x:Name="OriginalImageSmall" Aspect="AspectFit" />
-                </Border>
+        <!-- Tab Content ScrollView -->
+        <ScrollView Grid.Row="1">
+            <StackLayout>
+                <!-- Single Image Tab Content -->
+                <StackLayout x:Name="SingleImageContent"
+                             Padding="20"
+                             Spacing="20"
+                             IsVisible="True">
 
-                <Label Text="Large" FontAttributes="Bold" />
-                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
-                    <Image x:Name="LargeImageSmall" Aspect="AspectFit" />
-                </Border>
+                    <Label Text="Single Image Compression"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,10,0,20" />
 
-                <Label Text="Medium" FontAttributes="Bold" />
-                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
-                    <Image x:Name="MediumImageSmall" Aspect="AspectFit" />
-                </Border>
+                    <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="20"
+                           CornerRadius="10">
+                        <StackLayout Spacing="15">
+                            <Label Text="Select an image to compress into Small (800px), Medium (1200px), and Large (1920px) WebP sizes. A folder will be created with the image name containing all compressed versions."
+                                   FontSize="16"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
 
-                <Label Text="Small" FontAttributes="Bold" />
-                <Border Stroke="#E0E0E0" StrokeShape="RoundRectangle 6" Padding="2" MaximumHeightRequest="100">
-                    <Image x:Name="SmallImageSmall" Aspect="AspectFit" />
-                </Border>
-            </VerticalStackLayout>
-        </VerticalStackLayout>
+                            <Button x:Name="SelectImageButton"
+                                    Text="📷 Select Image"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                    TextColor="White"
+                                    Clicked="OnSelectImageClicked"
+                                    CornerRadius="8"
+                                    HeightRequest="50" />
 
-        <!-- Responsive Switch -->
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="ResponsiveStates">
-                <VisualState x:Name="Narrow">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter TargetName="GridLayout" Property="IsVisible" Value="False" />
-                        <Setter TargetName="StackLayout" Property="IsVisible" Value="True" />
-                    </VisualState.Setters>
-                </VisualState>
+                            <Label x:Name="SelectedImageLabel"
+                                   Text="No image selected"
+                                   FontSize="14"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                                   IsVisible="False" />
 
-                <VisualState x:Name="Wide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="720" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter TargetName="GridLayout" Property="IsVisible" Value="True" />
-                        <Setter TargetName="StackLayout" Property="IsVisible" Value="False" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-    </ScrollView>
+                            <Frame x:Name="ImagePreviewFrame"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray900}}"
+                                   BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                   Padding="10"
+                                   CornerRadius="8"
+                                   IsVisible="False">
+                                <StackLayout>
+                                    <Image x:Name="PreviewImageSingle"
+                                           Aspect="AspectFit"
+                                           HeightRequest="200"
+                                           BackgroundColor="Transparent" />
+                                    <Label x:Name="ImageDetailsLabelSingle"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                           HorizontalOptions="Center"
+                                           Margin="0,5,0,0" />
+                                </StackLayout>
+                            </Frame>
+
+                            <Button x:Name="ProcessSingleButton"
+                                    Text="🔄 Process Image"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
+                                    TextColor="White"
+                                    Clicked="OnProcessSingleClicked"
+                                    CornerRadius="8"
+                                    HeightRequest="50"
+                                    IsVisible="False" />
+
+                            <ProgressBar x:Name="SingleProgressBar"
+                                         IsVisible="False"
+                                         HeightRequest="8" />
+
+                            <Label x:Name="SingleStatusLabel"
+                                   FontSize="14"
+                                   HorizontalOptions="Center"
+                                   IsVisible="False" />
+
+                            <!-- Compression Results Preview -->
+                            <Frame x:Name="CompressionResultsFrame"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource Success}, Dark={StaticResource SuccessDark}}"
+                                   Padding="15"
+                                   CornerRadius="8"
+                                   IsVisible="False">
+                                <StackLayout>
+                                    <Label Text="✅ Compression Complete - Preview Results"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"
+                                           Margin="0,0,0,15" />
+                                    
+                                    <Grid RowSpacing="10" ColumnSpacing="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="200" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="200" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Original -->
+                                        <Label Grid.Row="0" Grid.Column="0" 
+                                               Text="Original" 
+                                               FontAttributes="Bold" 
+                                               TextColor="White" 
+                                               HorizontalOptions="Center" />
+                                        <Frame Grid.Row="1" Grid.Column="0" 
+                                               BackgroundColor="White" 
+                                               Padding="5" 
+                                               CornerRadius="5">
+                                            <StackLayout>
+                                                <Image x:Name="OriginalPreview"
+                                                       Aspect="AspectFit">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnPreviewImageTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label x:Name="OriginalSizeLabel"
+                                                       FontSize="10"
+                                                       TextColor="Black"
+                                                       HorizontalOptions="Center" />
+                                            </StackLayout>
+                                        </Frame>
+
+                                        <!-- Large -->
+                                        <Label Grid.Row="0" Grid.Column="1" 
+                                               Text="Large (1920px)" 
+                                               FontAttributes="Bold" 
+                                               TextColor="White" 
+                                               HorizontalOptions="Center" />
+                                        <Frame Grid.Row="1" Grid.Column="1" 
+                                               BackgroundColor="White" 
+                                               Padding="5" 
+                                               CornerRadius="5">
+                                            <StackLayout>
+                                                <Image x:Name="LargePreview"
+                                                       Aspect="AspectFit">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnPreviewImageTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label x:Name="LargeSizeLabel"
+                                                       FontSize="10"
+                                                       TextColor="Black"
+                                                       HorizontalOptions="Center" />
+                                            </StackLayout>
+                                        </Frame>
+
+                                        <!-- Medium -->
+                                        <Label Grid.Row="2" Grid.Column="0" 
+                                               Text="Medium (1200px)" 
+                                               FontAttributes="Bold" 
+                                               TextColor="White" 
+                                               HorizontalOptions="Center" />
+                                        <Frame Grid.Row="3" Grid.Column="0" 
+                                               BackgroundColor="White" 
+                                               Padding="5" 
+                                               CornerRadius="5">
+                                            <StackLayout>
+                                                <Image x:Name="MediumPreview"
+                                                       Aspect="AspectFit">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnPreviewImageTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label x:Name="MediumSizeLabel"
+                                                       FontSize="10"
+                                                       TextColor="Black"
+                                                       HorizontalOptions="Center" />
+                                            </StackLayout>
+                                        </Frame>
+
+                                        <!-- Small -->
+                                        <Label Grid.Row="2" Grid.Column="1" 
+                                               Text="Small (800px)" 
+                                               FontAttributes="Bold" 
+                                               TextColor="White" 
+                                               HorizontalOptions="Center" />
+                                        <Frame Grid.Row="3" Grid.Column="1" 
+                                               BackgroundColor="White" 
+                                               Padding="5" 
+                                               CornerRadius="5">
+                                            <StackLayout>
+                                                <Image x:Name="SmallPreview"
+                                                       Aspect="AspectFit">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnPreviewImageTapped" />
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                                <Label x:Name="SmallSizeLabel"
+                                                       FontSize="10"
+                                                       TextColor="Black"
+                                                       HorizontalOptions="Center" />
+                                            </StackLayout>
+                                        </Frame>
+                                    </Grid>
+
+                                    <Label x:Name="CompressionSummaryLabel"
+                                           FontSize="14"
+                                           TextColor="White"
+                                           HorizontalOptions="Center"
+                                           Margin="0,15,0,0" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+                <!-- Bulk Images Tab Content -->
+                <StackLayout x:Name="BulkImageContent"
+                             Padding="20"
+                             Spacing="20"
+                             IsVisible="False">
+
+                    <Label Text="Bulk Image Compression"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,10,0,20" />
+
+                    <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="20"
+                           CornerRadius="10">
+                        <StackLayout Spacing="15">
+                            <Label Text="Select input folder containing images, then specify where to save the compressed results. Each image will have its own subfolder containing small, medium, and large WebP versions."
+                                   FontSize="16"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+
+                            <Grid RowSpacing="10" ColumnSpacing="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Input Folder Section -->
+                                <Label Grid.Row="0"
+                                       Text="📁 INPUT FOLDER"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+
+                                <Button x:Name="SelectFolderButton"
+                                        Grid.Row="1"
+                                        Text="📁 Select Input Folder"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                        TextColor="White"
+                                        Clicked="OnSelectFolderClicked"
+                                        CornerRadius="8"
+                                        HeightRequest="50" />
+
+                                <Label x:Name="SelectedFolderLabel"
+                                       Grid.Row="2"
+                                       Text="No input folder selected"
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                                       IsVisible="False" />
+
+                                <!-- Output Folder Section -->
+                                <Label Grid.Row="3"
+                                       Text="💾 OUTPUT FOLDER"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
+                                       Margin="0,20,0,0" />
+
+                                <Button x:Name="SelectOutputFolderButton"
+                                        Grid.Row="4"
+                                        Text="💾 Select Output Folder"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
+                                        TextColor="White"
+                                        Clicked="OnSelectOutputFolderClicked"
+                                        CornerRadius="8"
+                                        HeightRequest="50"
+                                        IsVisible="False" />
+
+                                <Label x:Name="OutputPathLabel"
+                                       Grid.Row="5"
+                                       Text="Or enter output folder path manually:"
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                       Margin="0,10,0,5"
+                                       IsVisible="False" />
+
+                                <Entry x:Name="OutputPathEntry"
+                                       Grid.Row="6"
+                                       Placeholder="C:\Users\YourName\Desktop\CompressedImages"
+                                       FontSize="14"
+                                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray700}}"
+                                       TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                       PlaceholderColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}"
+                                       TextChanged="OnOutputPathChanged"
+                                       IsVisible="False" />
+
+                                <Button x:Name="ValidateOutputPathButton"
+                                        Grid.Row="7"
+                                        Text="✓ Use This Output Path"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource TertiaryDark}}"
+                                        TextColor="White"
+                                        Clicked="OnValidateOutputPathClicked"
+                                        CornerRadius="8"
+                                        HeightRequest="45"
+                                        IsVisible="False" />
+                            </Grid>
+
+                            <Label x:Name="OutputFolderInfoLabel"
+                                   FontSize="14"
+                                   FontAttributes="Italic"
+                                   TextColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
+                                   IsVisible="False" />
+
+                            <Button x:Name="ProcessBulkButton"
+                                    Text="🚀 Process All Images"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Success}, Dark={StaticResource SuccessDark}}"
+                                    TextColor="White"
+                                    Clicked="OnProcessBulkClicked"
+                                    CornerRadius="8"
+                                    HeightRequest="50"
+                                    IsVisible="False" />
+
+                            <ProgressBar x:Name="BulkProgressBar"
+                                         IsVisible="False"
+                                         HeightRequest="8" />
+
+                            <Label x:Name="BulkStatusLabel"
+                                   FontSize="14"
+                                   HorizontalOptions="Center"
+                                   IsVisible="False" />
+
+                            <Frame x:Name="BulkResultsFrame"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray900}}"
+                                   BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                   Padding="15"
+                                   CornerRadius="8"
+                                   IsVisible="False">
+                                <StackLayout>
+                                    <Label x:Name="BulkResultsLabel"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,10" />
+                                    <Label x:Name="BulkDetailsLabel"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Output structure info -->
+                    <Frame  BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="15"
+                           CornerRadius="8">
+                        <StackLayout>
+                            <Label Text="📁 Output Structure"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   Margin="0,0,0,5" />
+                            <Label Text="Creates subfolders in your output directory:&#10;• basename_a/&#10;  - basename_a_small.webp (800px)&#10;  - basename_a_medium.webp (1200px)&#10;  - basename_a_large.webp (1920px)&#10;• basename_b/&#10;  - basename_b_small.webp&#10;  - basename_b_medium.webp&#10;  - basename_b_large.webp"
+                                   FontSize="14"
+                                   TextColor="White" />
+                            <Label Text="&#10;ℹ️ Supported: JPG, JPEG, PNG, BMP, GIF, TIFF, WebP"
+                                   FontSize="12"
+                                   TextColor="White"
+                                   FontAttributes="Italic" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+                <!-- FTP Bulk Tab Content -->
+                <StackLayout x:Name="FtpImageContent"
+                             Padding="20"
+                             Spacing="20"
+                             IsVisible="False">
+
+                    <Label Text="FTP Bulk Image Compression"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,10,0,20" />
+
+                    <!-- FTP Configuration Frame -->
+                    <Frame  BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="20"
+                           CornerRadius="10">
+                        <StackLayout Spacing="15">
+                            <Label Text="🌐 FTP Configuration"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+
+                            <Grid RowSpacing="10" ColumnSpacing="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Server -->
+                                <Label Grid.Row="0" Grid.Column="0" 
+                                       Text="Server:" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" 
+                                       VerticalOptions="Center" />
+                                <Entry x:Name="FtpServerEntry"
+                                       Grid.Row="0" Grid.Column="1"
+                                       Placeholder="ftp.example.com"
+                                       FontSize="14"
+                                       BackgroundColor="White"
+                                       TextColor="Black" />
+
+                                <!-- Port -->
+                                <Label Grid.Row="1" Grid.Column="0" 
+                                       Text="Port:" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" 
+                                       VerticalOptions="Center" />
+                                <Entry x:Name="FtpPortEntry"
+                                       Grid.Row="1" Grid.Column="1"
+                                       Placeholder="21"
+                                       Text="21"
+                                       Keyboard="Numeric"
+                                       FontSize="14"
+                                       BackgroundColor="White"
+                                       TextColor="Black" />
+
+                                <!-- Username -->
+                                <Label Grid.Row="2" Grid.Column="0" 
+                                       Text="Username:" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" 
+                                       VerticalOptions="Center" />
+                                <Entry x:Name="FtpUsernameEntry"
+                                       Grid.Row="2" Grid.Column="1"
+                                       Placeholder="username"
+                                       FontSize="14"
+                                       BackgroundColor="White"
+                                       TextColor="Black" />
+
+                                <!-- Password -->
+                                <Label Grid.Row="3" Grid.Column="0" 
+                                       Text="Password:" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" 
+                                       VerticalOptions="Center" />
+                                <Entry x:Name="FtpPasswordEntry"
+                                       Grid.Row="3" Grid.Column="1"
+                                       Placeholder="password"
+                                       IsPassword="True"
+                                       FontSize="14"
+                                       BackgroundColor="White"
+                                       TextColor="Black" />
+
+                                <!-- Remote Path -->
+                                <Label Grid.Row="4" Grid.Column="0" 
+                                       Text="Remote Path:" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" 
+                                       VerticalOptions="Center" />
+                                <Entry x:Name="FtpRemotePathEntry"
+                                       Grid.Row="4" Grid.Column="1"
+                                       Placeholder="/uploads/compressed/"
+                                       Text="/"
+                                       FontSize="14"
+                                       BackgroundColor="White"
+                                       TextColor="Black" />
+
+                                <!-- Configuration Options -->
+                                <StackLayout Grid.Row="5" Grid.ColumnSpan="2" 
+                                            Orientation="Horizontal" 
+                                            Spacing="20"
+                                            Margin="0,10,0,0">
+                                    <CheckBox x:Name="SaveConfigCheckBox" 
+                                              Color="White" />
+                                    <Label Text="Save Configuration" 
+                                           TextColor="White" 
+                                           VerticalOptions="Center" />
+                                    
+                                    <CheckBox x:Name="RememberPasswordCheckBox" 
+                                              Color="White" />
+                                    <Label Text="Remember Password" 
+                                           TextColor="White" 
+                                           VerticalOptions="Center" />
+                                </StackLayout>
+
+                                <!-- Test Connection Button -->
+                                <Button x:Name="TestConnectionButton"
+                                        Grid.Row="6" Grid.ColumnSpan="2"
+                                        Text="🔗 Test Connection"
+                                        BackgroundColor="White"
+                                        TextColor="{StaticResource Info}"
+                                        Clicked="OnTestConnectionClicked"
+                                        CornerRadius="8"
+                                        HeightRequest="45"
+                                        Margin="0,10,0,0" />
+
+                                <!-- Connection Status -->
+                                <Label x:Name="ConnectionStatusLabel"
+                                       Grid.Row="7" Grid.ColumnSpan="2"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"
+                                       IsVisible="False"
+                                       Margin="0,5,0,0" />
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Input Folder Selection Frame -->
+                    <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="20"
+                           CornerRadius="10">
+                        <StackLayout Spacing="15">
+                            <Label Text="Select input folder containing images. All images will be compressed and uploaded to the FTP server with organized folder structure."
+                                   FontSize="16"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+
+                            <Button x:Name="SelectFtpInputFolderButton"
+                                    Text="📁 Select Input Folder"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                    TextColor="White"
+                                    Clicked="OnSelectFtpInputFolderClicked"
+                                    CornerRadius="8"
+                                    HeightRequest="50" />
+
+                            <Label x:Name="SelectedFtpFolderLabel"
+                                   Text="No input folder selected"
+                                   FontSize="14"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                                   IsVisible="False" />
+
+                            <Button x:Name="ProcessFtpButton"
+                                    Text="🚀 Process &amp; Upload to FTP"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Success}, Dark={StaticResource SuccessDark}}"
+                                    TextColor="White"
+                                    Clicked="OnProcessFtpClicked"
+                                    CornerRadius="8"
+                                    HeightRequest="50"
+                                    IsVisible="False" />
+
+                            <ProgressBar x:Name="FtpProgressBar"
+                                         IsVisible="False"
+                                         HeightRequest="8" />
+
+                            <Label x:Name="FtpStatusLabel"
+                                   FontSize="14"
+                                   HorizontalOptions="Center"
+                                   IsVisible="False" />
+
+                            <Frame x:Name="FtpResultsFrame"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray900}}"
+                                   BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                   Padding="15"
+                                   CornerRadius="8"
+                                   IsVisible="False">
+                                <StackLayout>
+                                    <Label x:Name="FtpResultsLabel"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           Margin="0,0,0,10" />
+                                    <Label x:Name="FtpDetailsLabel"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- FTP Upload Info -->
+                    <Frame  BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                           Padding="15"
+                           CornerRadius="8">
+                        <StackLayout>
+                            <Label Text="📡 FTP Upload Process"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   Margin="0,0,0,5" />
+                            <Label Text="Each image will be compressed and uploaded with folder structure:&#10;• basename_a/&#10;  - basename_a_small.webp&#10;  - basename_a_medium.webp&#10;  - basename_a_large.webp&#10;&#10;⚠️ Large uploads may take time depending on connection speed"
+                                   FontSize="14"
+                                   TextColor="White" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Image Popup Modal -->
+        <Grid x:Name="ImagePopupModal"
+              Grid.RowSpan="2"
+              BackgroundColor="#80000000"
+              IsVisible="False">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseImagePopup" />
+            </Grid.GestureRecognizers>
+            
+            <Frame BackgroundColor="White"
+                   Padding="20"
+                   CornerRadius="15"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Margin="20">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Frame.GestureRecognizers>
+                
+                <StackLayout Spacing="15" MaximumWidthRequest="600">
+                    <Label x:Name="PopupImageTitle"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="Black" />
+                    
+                    <Image x:Name="PopupImage"
+                           Aspect="AspectFit"
+                           MaximumHeightRequest="500"
+                           BackgroundColor="Transparent" />
+                    
+                    <Label x:Name="PopupImageDetails"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource Gray600}" />
+                    
+                    <Button Text="✕ Close"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Clicked="OnCloseImagePopup"
+                            CornerRadius="8"
+                            HeightRequest="40"
+                            WidthRequest="100"
+                            HorizontalOptions="Center" />
+                </StackLayout>
+            </Frame>
+        </Grid>
+    </Grid>
 </ContentPage>
